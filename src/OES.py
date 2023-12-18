@@ -79,6 +79,24 @@ class OES :
                 B.append(0)
                 
         matrix = np.array(matrix)
+        B = np.array(B)
+        
+        # Solve the system of equations
+        solution, residuals, rank, s = np.linalg.lstsq(matrix, B, rcond=None)
+
+        # If the rank of the coefficient matrix is less than the number of variables, the system is underdetermined
+        if rank < min(matrix.shape):
+            print("The system of equations is underdetermined.")
+        else:
+           print(solution)
+           heat = 0
+           j =0 
+           for i in solution:
+               heat+=i*self.equations[j]['heat']
+               j+=1
+            
+           heat = round(heat)
+           print(f"heat: {heat}")
         
     
 '''
