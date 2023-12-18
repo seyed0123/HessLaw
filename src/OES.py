@@ -1,9 +1,12 @@
 class OES :
     def __init__(self,inputs,target) -> None:
+        
+        self.equations = []
         for input in inputs:
-            equations.append(self.parse(input))
+            self.equations.append(self.parse(input))
             
-        equations = []
+        
+        self.target =  self.parse(target)
         
     
     def parse(self,input):
@@ -12,25 +15,33 @@ class OES :
         
         reactants_dict = {}
         productions_dict = {}
-        
-        half = input.split('=')
+        input = input.split('->')
+        heat = input[1].split(' ')
+        heat = list(filter(None,heat))
+        reactants_dict['heat'] = int(heat[0])
+        half = input[0].split('=')
         reactants = half[0].split('+')
         productions = half[1].split('+')
         
         for reactant in reactants:
             temp = reactant.split(' ')
-            list(filter(None, temp))
+            temp = list(filter(None, temp))
             
-            reactants_dict[temp[1]] = temp[0]
+            if len(temp) ==1:
+                reactants_dict[temp[0]] = 1
+            else:
+                reactants_dict[temp[1]] = int(temp[0])
         
         for production in productions:
             temp = production.split(' ')
             temp = list(filter(None, temp))
-            
-            productions_dict[temp[1]] = temp[0]*-1
+            if len(temp) == 1:
+                productions_dict[temp[0]] = -1
+            else:
+                productions_dict[temp[1]] = -1*int(temp[0])
             
     
-        return dict(productions_dict+reactants_dict)
+        return {**productions_dict,**reactants_dict}
         
         
     

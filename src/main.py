@@ -1,3 +1,4 @@
 import OES
 inp = input()
-solver = OES.OES([inp])
+target = ''
+solver = OES.OES([inp],target)
