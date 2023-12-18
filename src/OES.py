@@ -1,12 +1,23 @@
+import numpy as np
+
 class OES :
     def __init__(self,inputs,target) -> None:
-        
+        self.elements = []
         self.equations = []
+        
         for input in inputs:
-            self.equations.append(self.parse(input))
+            ret = self.parse(input)
+            self.equations.append(ret)
+            self.elements.extend(ret)
             
         
         self.target =  self.parse(target)
+        
+        self.elements = list(set(self.elements))
+        
+        self.elements.remove('heat')
+        
+        
         
     
     def parse(self,input):
@@ -44,8 +55,31 @@ class OES :
         return {**productions_dict,**reactants_dict}
         
         
-    
-    
+    def solve(self):
+        matrix = []
+        B = []
+        
+        equ_elem = {}
+        i = 0
+        for element in self.elements:
+            equ_elem[element] = i
+            i+=1
+            l = []
+            for equation in self.equations:
+                if(element in equation.keys()):
+                    l.append(equation[element])
+                else:
+                    l.append(0)
+            
+            matrix.append(l)
+
+            if(element in self.target.keys()):
+                B.append(self.target[element])
+            else:
+                B.append(0)
+                
+        matrix = np.array(matrix)
+        
     
 '''
 a11 x1 + a12 x2 + a13 x3 = a14 x4 + a15 x5 + a16 x6     * p1
