@@ -1,5 +1,5 @@
 import numpy as np
-
+from math import floor
 class OES :
     def __init__(self,inputs,target) -> None:
         self.elements = []
@@ -81,10 +81,14 @@ class OES :
         matrix = np.array(matrix)
         B = np.array(B)
         
-        # Solve the system of equations
-        solution, residuals, rank, s = np.linalg.lstsq(matrix, B, rcond=None)
 
-        # If the rank of the coefficient matrix is less than the number of variables, the system is underdetermined
+        solution, residuals, rank, s = np.linalg.lstsq(matrix, B, rcond=None)
+        
+        for sol in solution:
+            if int((sol-floor(sol))*1000) !=0:
+                print("This equations don't have a solution.\nHere is the nearest solution for it.")
+                break
+            
         if rank < min(matrix.shape):
             print("The system of equations is underdetermined.")
         else:

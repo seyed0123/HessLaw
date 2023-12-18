@@ -1,6 +1,6 @@
 import OES
-inp = ['2 no + o2 = 2 no2 ->-116','2 n2 + 5 o2 + 2 h2o = 4 hno3 ->-256','n2 + o2 = 2 no ->183']
-target = '3 no2 + h2o = 2 hno3 + no -> 0'
+inp = ['2 h2 + n2 = n2h4 -> 91',' n2h4 + h2 = 2 nh3 + p4 -> -183']
+target = '3 h2 + n2 = 2 nh3 -> 0'
 solver = OES.OES(inp,target)
 
 solver.solve()
