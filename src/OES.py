@@ -1,7 +1,8 @@
 import numpy as np
-from math import floor
+
 class OES :
     def __init__(self,inputs,target) -> None:
+        target+='-> 0'
         self.elements = []
         self.equations = []
         
@@ -80,41 +81,29 @@ class OES :
                 
         matrix = np.array(matrix)
         B = np.array(B)
+        actual = True
+        heat = 0
         
 
         solution, residuals, rank, s = np.linalg.lstsq(matrix, B, rcond=None)
         
-        for sol in solution:
-            if int((sol-floor(sol))*1000) !=0:
-                print("This equations don't have a solution.\nHere is the nearest solution for it.")
-                break
             
         if rank < min(matrix.shape):
             print("The system of equations is underdetermined.")
         else:
-           print(solution)
-           heat = 0
-           j =0 
-           for i in solution:
+            
+            for i in range(len(equ_elem)):
+                dot_product = np.dot(matrix[i],solution)
+                if not np.isclose(dot_product, B[i], atol=1e-8):
+                    return None, None, False
+                
+            j =0 
+            for i in solution:
                heat+=i*self.equations[j]['heat']
                j+=1
             
-           heat = round(heat)
-           print(f"heat: {heat}")
+            heat = round(heat)
+
+        return heat, solution, actual
         
     
-'''
-a11 x1 + a12 x2 + a13 x3 = a14 x4 + a15 x5 + a16 x6     * p1
-a21 x1 + a22 x2 + a23 x3 = a24 x4 + a25 x5 + a26 x6     * p2
-
-
-b1 x1 + b2 x2 + b3 x3 = b4 x4 + b5 x5 + b6 x6
-
-
-
-b1 = p1 * a11 + p2 * a21
-b2 = p1 * a12 + p2* a22
-b3 = p1 * a13 + p2* a23
-
-
-'''
